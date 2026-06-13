@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import os
 from functools import lru_cache
+from pathlib import Path
 from typing import Any
 
 from dotenv import load_dotenv
@@ -18,7 +19,12 @@ from .ed_client import EdClient, EdError
 from .formatting import render_thread, summarize_thread
 from .rerank import rerank_threads
 
-load_dotenv()
+# Load .env from the project root (two levels above this package), so the server
+# works no matter which directory the MCP client launches it from. Existing env
+# vars are not overridden, so `-e` flags on `claude mcp add` still take priority.
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
+load_dotenv(_PROJECT_ROOT / ".env")
+load_dotenv()  # also honor a .env in the current working directory, if any
 
 mcp = FastMCP("EdStem")
 
