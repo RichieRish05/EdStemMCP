@@ -1,0 +1,21 @@
+# Secrets
+.env
+.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual envs
+.venv/
+venv/
+
+# Tooling
+.uv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
