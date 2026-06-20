@@ -26,6 +26,7 @@ class EdClient:
         base_url: str = DEFAULT_BASE_URL,
         timeout: float = 30.0,
     ) -> None:
+        """Configure the HTTP client and validate that a token is present."""
         if not token:
             raise EdError(
                 "Missing Ed API token. Set ED_API_TOKEN "
@@ -40,11 +41,13 @@ class EdClient:
         )
 
     def close(self) -> None:
+        """Close the underlying HTTP connection pool."""
         self._client.close()
 
     # -- internal ---------------------------------------------------------
 
     def _get(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
+        """Issue an authenticated GET and return the parsed JSON body."""
         try:
             resp = self._client.get(path, params=params)
         except httpx.HTTPError as exc:  # network/timeout errors

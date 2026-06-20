@@ -34,6 +34,7 @@ def document_to_markdown(xml: str | None) -> str:
 
 
 def _render_children(node: Tag) -> str:
+    """Render every child of ``node`` and concatenate the results."""
     parts: list[str] = []
     for child in node.children:
         parts.append(_render_node(child))
@@ -41,6 +42,7 @@ def _render_children(node: Tag) -> str:
 
 
 def _render_node(node: Any) -> str:
+    """Render a single Ed XML node (text or tag) as markdown."""
     if isinstance(node, NavigableString):
         return str(node)
     if not isinstance(node, Tag):
@@ -96,6 +98,7 @@ def _render_node(node: Any) -> str:
 
 
 def _snippet(text: str, length: int = 280) -> str:
+    """Collapse whitespace and truncate ``text`` to ``length`` characters."""
     flat = " ".join(text.split())
     return flat if len(flat) <= length else flat[:length].rstrip() + "…"
 
@@ -132,6 +135,7 @@ def summarize_thread(thread: dict[str, Any]) -> dict[str, Any]:
 
 
 def _render_comment(comment: dict[str, Any], depth: int = 0) -> str:
+    """Recursively render a comment (and its replies) as indented markdown."""
     indent = "  " * depth
     author = "anonymous" if comment.get("is_anonymous") else _author_name(comment)
     kind = comment.get("type", "comment")
@@ -151,6 +155,7 @@ def _render_comment(comment: dict[str, Any], depth: int = 0) -> str:
 
 
 def _author_name(obj: dict[str, Any]) -> str:
+    """Extract a display name for the author of a thread or comment."""
     user = obj.get("user") or {}
     return user.get("name") or obj.get("user_name") or "unknown"
 
